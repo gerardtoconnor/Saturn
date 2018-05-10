@@ -1,8 +1,8 @@
 namespace Saturn
 
 open Giraffe.Core
-open Giraffe.Routing
 open System.Collections.Generic
+open Giraffe.TokenRouter
 
 [<AutoOpen>]
 module Router =
@@ -130,7 +130,8 @@ module Router =
 
     ///Adds handler for `GET` request.
     [<CustomOperation("get")>]
-    member __.Get(state, path : string, action: HttpHandler) : ScopeState =
+    member __.Get(state:RouteNode, path : string, action: HttpHandler) : RouteNode =
+      state.
       addRoute RouteType.Get state path action
 
     ///Adds handler for `GET` request.

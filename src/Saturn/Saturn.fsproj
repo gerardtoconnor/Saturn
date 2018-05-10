@@ -11,6 +11,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Common.fs" />
+    <Compile Include="TokenParsers.fs" />
+    <Compile Include="TokenRouter.fs"/>
     <Compile Include="CORS.fs" />
     <Compile Include="Pipelines.fs" />
     <Compile Include="Router.fs" />
