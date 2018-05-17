@@ -15,9 +15,31 @@ open Giraffe.TokenParsers
 open NonStructuralComparison // needed for parser performance, non boxing of struct equality
 open Microsoft.AspNetCore.Http
 
+open System.Threading.Tasks
+
+type HResult = Task<HttpContext option>
+type INode =
+    abstract Run        : HttpContext -> HResult
+    abstract AddPath    : string -> INode
+    abstract AddParse   : (PrintfFormat<_,_,_,_,'a> * (('a * HttpContext) -> HResult)) -> INode
+    abstract AddFilter  : (HttpContext -> HResult) -> INode 
+    abstract AddAppy    : (HttpContext -> unit) -> INode
+
+type EmptyNode() =
+    interface INode with
+        member __.Run ctx = ctx |> Some |> Task.FromResult
+        member __.AddPath path = PathNode(path) :> INode
+
+and PathNode(str) = 
+    interface INode with
+        member __.Run ctx = ctx |> Some |> Task.FromResult
+
+
+
 // --------------------------------------
 // Node Token (Radix) Tree using node mapping functions
 // --------------------------------------
+
 
 /// Tail Clip: clip end of 'str' string staring from int pos -> end
 let inline private (-|) (str:string) (from:int) = str.Substring(from,str.Length - from)
